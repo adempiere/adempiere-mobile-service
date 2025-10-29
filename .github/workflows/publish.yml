@@ -131,19 +131,31 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: Download build dist app
+
+      - name: Download dist artifacts
         uses: actions/download-artifact@v4
         with:
-          name: adempiere-mobile-service.zip
+          name: release-artifacts
+          path: artifacts/
+
       - name: Unzip Asset
         run: |
-          unzip adempiere-mobile-service.zip -d docker/
-      - name: Login to GitHub Container Registry
+          tree artifacts
+          unzip artifacts/adempiere-mobile-service.zip -d docker/
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
         uses: docker/login-action@v2
         with:
           # CONFIGURE DOCKER SECRETS INTO REPOSITORY
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
+
       - name: Push alpine image in Docker Hub
         uses: docker/build-push-action@v2
         with:
@@ -166,25 +178,32 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: Download build dist app
+
+      - name: Download dist artifacts
         uses: actions/download-artifact@v4
         with:
-          name: adempiere-mobile-service.zip
+          name: release-artifacts
+          path: artifacts/
+
       - name: Unzip Asset
         run: |
-          unzip adempiere-mobile-service.zip -d docker/
-      - name: Set up QEMU
+          tree artifacts
+          unzip artifacts/adempiere-mobile-service.zip -d docker/
+
+      - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
+
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to GitHub Container Registry
+
+      - name: Login to Container Registry
         uses: docker/login-action@v2
         with:
           # CONFIGURE DOCKER SECRETS INTO REPOSITORY
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Push alpine image in Docker Hub
+      - name: Push ubuntu image in Docker Hub
         uses: docker/build-push-action@v4
         with:
           context: .
