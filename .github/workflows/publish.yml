@@ -91,7 +91,7 @@ jobs:
             artifacts/adempiere-mobile-service.zip.MD5
             artifacts/adempiere-mobile-service.zip
             artifacts/adempiere-mobile-service.tar.MD5
-            artifacts/adempiere-report-engine-service.tar
+            artifacts/adempiere-mobile-service.tar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
