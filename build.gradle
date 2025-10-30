@@ -127,6 +127,10 @@ sourceSets {
 			srcDirs 'build/generated/source/proto/main/java'
 			srcDirs 'src/main/proto'
 		}
+		resources {
+			srcDirs 'src/main/java'
+			include 'org/spin/base/version.properties'
+		}
 	}
 }
 
