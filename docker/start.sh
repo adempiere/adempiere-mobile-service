@@ -11,8 +11,8 @@ sed -i "s|$DEFAULT_JAVA_OPTIONS|$JAVA_OPTIONS|g" bin/start-backend.sh
 
 # Set data base conection values
 sed -i "s|PostgreSQL|$DB_TYPE|g" env.yaml
-sed -i "s|adempiere_database_host|$DB_HOST|g" env.yaml
 sed -i "s|5432|$DB_PORT|g" env.yaml
+sed -i "s|adempiere_database_host|$DB_HOST|g" env.yaml
 sed -i "s|adempiere_database_value|$DB_NAME|g" env.yaml
 sed -i "s|adempiere_user_value|$DB_USER|g" env.yaml
 
