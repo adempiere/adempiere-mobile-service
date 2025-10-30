@@ -37,6 +37,12 @@ jobs:
         with:
           gradle-version: 9.0.0 # current
 
+      - name: Set Version Properties
+        run: |
+          echo "MAIN_VERSION=${{ github.event.release.name }}" >> src/main/java/org/spin/base/version.properties
+          echo "DATE_VERSION=$(date +'%Y-%m-%d')" >> src/main/java/org/spin/base/version.properties
+          echo "IMPLEMENTATION_VERSION=${{ github.event.release.tag_name }}" >> src/main/java/org/spin/base/version.properties
+
       - name: Create Release with Gradle
         run: gradle createRelease --warning-mode all --stacktrace
         env:
