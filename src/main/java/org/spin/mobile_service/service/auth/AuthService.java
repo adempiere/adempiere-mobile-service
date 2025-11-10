@@ -36,8 +36,8 @@ import org.spin.service.grpc.util.value.TextManager;
 public class AuthService {
 
 	public static CheckTokenResponse checkToken(CheckTokenRequest chekToken) {
-		if(Util.isEmpty(chekToken.getToken())) {
-			throw new AdempiereException("Token is Mandatory");
+		if(Util.isEmpty(chekToken.getToken(), true)) {
+			throw new AdempiereException("@FillMandatory@ Token");
 		}
 		//	
 		CheckTokenResponse.Builder response = CheckTokenResponse.newBuilder();
@@ -56,25 +56,25 @@ public class AuthService {
 
 
 	public static LoginResponse login(LoginRequest loginRequest) {
-		if(Util.isEmpty(loginRequest.getEmail()) || Util.isEmpty(loginRequest.getPassword())) {
-			throw new AdempiereException("@AD_User_ID@ @NotFound@");
+		if(Util.isEmpty(loginRequest.getEmail(), true) || Util.isEmpty(loginRequest.getPassword(), true)) {
+			throw new AdempiereException("@FillMandatory@ @AD_User_ID@ / @Password@");
 		}
-		
+
 		Login login = new Login(Env.getCtx());
 		int userId = login.getAuthenticatedUserId(loginRequest.getEmail(), loginRequest.getPassword());
 		//	Get Values from role
 		if(userId <= 0) {
-			throw new AdempiereException("@AD_User_ID@ / @AD_Role_ID@ / @AD_Org_ID@ @NotFound@");
+			throw new AdempiereException("@AD_User_ID@ / @Password@ / @AD_Role_ID@ / @AD_Org_ID@ @NotFound@");
 		}
 		MUser user = MUser.get(Env.getCtx(), userId);
 		if (user == null) {
-			throw new AdempiereException("@AD_User_ID@ / @AD_Role_ID@ / @AD_Org_ID@ @NotFound@");
+			throw new AdempiereException("@AD_User_ID@ @NotFound@");
 		}
 		LoginResponse.Builder builder = LoginResponse.newBuilder();
 		int roleId = SessionManager.getDefaultRoleId(userId);
 		//	Get Values from role
 		if(roleId < 0) {
-			throw new AdempiereException("@AD_User_ID@ / @AD_Role_ID@ / @AD_Org_ID@ @NotFound@");
+			throw new AdempiereException("@AD_User_ID@: @AD_Role_ID@ @NotFound@");
 		}
 
 		//	Organization
